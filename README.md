@@ -1,7 +1,7 @@
 WowDoge - Dogecoin Lightweight Wallet
 =================
 
-Lightweight Simplified Payment Verification (SPV) Doge Coin desktop Wallet.
+Lightweight Simplified Payment Verification (SPV) Dogecoin desktop Wallet.
 
 About
 =====
