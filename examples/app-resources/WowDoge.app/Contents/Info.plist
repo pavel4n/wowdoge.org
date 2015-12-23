@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleName</key>
+	<string>WowDoge</string>
+	<key>CFBundleIdentifier</key>
+	<string>org.wowdoge</string>
+	<key>CFBundleVersion</key>
+	<string>0.3.9.1</string>
+	<key>CFBundleAllowMixedLocalizations</key>
+	<string>true</string>
+	<key>CFBundleExecutable</key>
+	<string>JavaApplicationStub</string>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleSignature</key>
+	<string>????</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleIconFile</key>
+	<string>WowDoge.icns</string>
+	<key>NSHumanReadableCopyright</key>
+	<string>Copyright WowDoge developers 2014</string>
+	<key>CFBundleGetInfoString</key>
+	<string>WowDoge, © 2014 WowDoge developers</string>
+	<key>CFBundleDisplayName</key>
+	<string>WowDoge</string>
+	<key>Java</key>
+	<dict>
+		<key>WorkingDirectory</key>
+		<string>$APP_PACKAGE/Contents/Resources/Java</string>
+		<key>MainClass</key>
+		<string>org.wowdoge.Wow</string>
+		<key>JVMVersion</key>
+		<string>1.6+</string>
+		<key>ClassPath</key>
+		<string>$JAVAROOT/WowDoge.jar</string>
+		<key>SplashFile</key>
+		<string>$JAVAROOT/appicon.png</string>
+		<key>Properties</key>
+		<dict>
+			<key>apple.laf.useScreenMenuBar</key>
+			<string>true</string>
+		</dict>
+	</dict>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Shell</string>
+			<key>CFBundleURLIconFile</key>
+			<string>WowDoge.icns</string>
+			<key>CFBundleURLName</key>
+			<string>org.wowdoge.dogecoin.url</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>dogecoin</string>
+			</array>
+		</dict>
+	</array>
+	<key>NSHighResolutionCapable</key>
+	<true/>
+</dict>
+</plist>

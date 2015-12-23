@@ -1,0 +1,15 @@
+# This is a comment in a property file
+# Theme file must have .thm or .theme extension for file dialog filters
+# This is an example of a Theme contained in a property file.
+# Use a CustomTheme object to load it.
+
+# font style values - (1)Font.BOLD (2)Font.ITALIC (3)Font.PLAIN (4)Font.BOLD|Font.ITALIC
+
+name=Ruby Red
+primary1=152,52,99
+primary2=240,172,202
+primary3=255,52,92
+
+secondary1=102,102,102
+secondary2=152,152,152,
+secondary3=255,102,152

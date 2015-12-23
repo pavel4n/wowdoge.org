@@ -1,0 +1,17 @@
+com/google/dogecoin/tools/WalletTool$Condition.class
+com/google/bitcoin/tools/PaymentProtocolTool.class
+com/google/dogecoin/tools/WalletTool$3.class
+com/google/dogecoin/tools/WalletTool$2.class
+com/google/dogecoin/tools/BuildCheckpoints.class
+com/google/dogecoin/tools/WalletTool$4.class
+com/google/dogecoin/tools/WalletTool$NetworkEnum.class
+com/google/dogecoin/tools/WalletTool$WaitForEnum.class
+com/google/dogecoin/tools/WatchMempool.class
+com/google/dogecoin/tools/BlockImporter.class
+com/google/dogecoin/tools/WatchMempool$1.class
+com/google/dogecoin/tools/WalletTool$1.class
+com/google/dogecoin/tools/WalletTool$Condition$Type.class
+com/google/dogecoin/tools/WalletTool$ActionEnum.class
+com/google/dogecoin/tools/BuildCheckpoints$1.class
+com/google/dogecoin/tools/WalletTool.class
+com/google/dogecoin/tools/WalletTool$ValidationMode.class

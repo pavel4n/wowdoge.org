@@ -1,0 +1,460 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2012 Google Inc.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~    http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>com.google</groupId>
+        <artifactId>dogecoinj-parent</artifactId>
+        <version>0.12-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+        <groupId>org.wowdoge</groupId>
+    <artifactId>WowDoge</artifactId>
+    <version>0.3.15.1</version>
+    <name>WowDoge</name>
+    <description>A Java Swing client for DogeCoin</description>
+    <packaging>jar</packaging>
+    <url>http://www.wowdoge.org</url>
+    <!-- Use "mvn clean package" to build the code packaged into a basic WowDoge.jar 
+  		Use "mvn clean verify" before submitting a patch Use "mvn clean install" 
+  		to build the executable jar, installers and Mac DMG Use "mvn site:site" to 
+  		generate a complete website under target/site Use "mvn site:run" to run a 
+  		local webserver localhost:8080/index.html -->
+    <licenses>
+        <license>
+            <name>MIT</name>
+            <url>http://www.opensource.org/licenses/mit-license.php</url>
+            <distribution>repo</distribution>
+            <comments>A business-friendly OSS license</comments>
+        </license>
+    </licenses>
+    
+    <issueManagement>
+        <system>GitHub</system>
+        <url>https://github.com/pavel4n/wowdoge.org/issues</url>
+    </issueManagement>
+    
+    <scm>
+        <!-- Public read-only source -->
+        <url>https://github.com/pavel4n/wowdoge.org</url>
+    </scm>
+    
+    <properties>
+		<jdk.version>1.6</jdk.version>
+		<!-- Location of staging directory for creation of linux IzPack installer -->
+        <staging.linux.dir>${project.build.directory}/staging.linux
+        </staging.linux.dir>
+        <!-- Location of staging directory for creation of windows IzPack installer -->
+        <staging.windows.dir>${project.build.directory}/staging.windows
+        </staging.windows.dir>
+	</properties>
+
+    <repositories>
+        <!-- zxing repo -->
+        <repository>
+            <id>mvn-adamgent</id>
+            <url>http://mvn-adamgent.googlecode.com/svn/maven/release</url>
+            <name>Adam Gent Maven Repository</name>
+        </repository>
+    </repositories>
+    
+    <dependencies>
+        <dependency>
+            <groupId>com.google</groupId>
+            <artifactId>dogecoinj</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+<!--         <dependency> -->
+<!--             <groupId>org.slf4j</groupId> -->
+<!--             <artifactId>slf4j-jdk14</artifactId> -->
+<!--             <version>1.7.6</version> -->
+<!--         </dependency> -->
+        <dependency>
+            <groupId>com.github.sarxos</groupId>
+            <artifactId>webcam-capture</artifactId>
+            <version>0.3.9</version>
+        </dependency>
+        <dependency>
+			<groupId>com.google.zxing</groupId>
+			<artifactId>javase</artifactId>
+			<version>2.1</version>
+		</dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>1.3.167</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <version>1.4</version>
+        </dependency>
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+            <version>2.1</version>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.0.9</version>
+        </dependency>
+        <dependency>
+            <groupId>uk.org.lidalia</groupId>
+            <artifactId>sysout-over-slf4j</artifactId>
+            <version>1.0.2</version>
+        </dependency>
+		<dependency>
+			<groupId>org.codehaus.izpack</groupId>
+			<artifactId>izpack-standalone-compiler</artifactId>
+			<version>4.3.4</version>
+			<optional>true</optional>
+		</dependency>
+    </dependencies>
+    
+    <build>
+	<resources>
+		<!-- filter properties files e.g. version.properties -->
+		<resource>
+		    <targetPath>org/wowdoge</targetPath>
+			<directory>src/main/java/org/wowdoge</directory>
+			<filtering>true</filtering>
+			<includes>
+				<include>**/*.png</include>
+				<include>**/*.wav</include>
+				<include>**/*.checkpoints</include>
+			</includes>
+		</resource>
+	</resources>
+	<plugins>
+	  <plugin>
+		<groupId>org.apache.maven.plugins</groupId>
+		<artifactId>maven-compiler-plugin</artifactId>
+		<version>2.3.2</version>
+		<configuration>
+			<source>${jdk.version}</source>
+			<target>${jdk.version}</target>
+		</configuration>
+	  </plugin>
+
+
+		<plugin>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <!-- Put izPack2app into linux staging dir for production of linux installer later -->
+                    <execution>
+                        <id>unpack-shared-resources-ipack2app-linux</id>
+                        <goals>
+                            <goal>unpack-dependencies</goal>
+                        </goals>
+                        <phase>install</phase>
+                        <configuration>
+                            <includeGroupIds>org.codehaus.izpack</includeGroupIds>
+                            <includeArtifactIds>izpack-standalone-compiler
+                            </includeArtifactIds>
+                            <classifier>izpack2app</classifier>
+                            <type>zip</type>
+                            <excludeTransitive>true</excludeTransitive>
+                            <outputDirectory>${staging.linux.dir}</outputDirectory>
+                        </configuration>
+                    </execution>
+
+                    <!-- Put izPack2app into windows staging dir for production of windows installer later -->
+                    <execution>
+                        <id>unpack-shared-resources-ipack2app-windows</id>
+                        <goals>
+                            <goal>unpack-dependencies</goal>
+                        </goals>
+                        <phase>install</phase>
+                        <configuration>
+                            <includeGroupIds>org.codehaus.izpack</includeGroupIds>
+                            <includeArtifactIds>izpack-standalone-compiler
+                            </includeArtifactIds>
+                            <classifier>izpack2app</classifier>
+                            <type>zip</type>
+                            <excludeTransitive>true</excludeTransitive>
+                            <outputDirectory>${staging.windows.dir}</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            
+		    <!-- Create main executable jar - all classes -->
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>2.2.1</version>
+                <configuration>
+                    <descriptors>
+                        <descriptor>assemble/exe.xml</descriptor>
+                    </descriptors>
+                    <archive>
+						<manifest>
+							<mainClass>org.wowdoge.Wow</mainClass>
+						</manifest>
+						<manifestEntries>
+            			<SplashScreen-Image>org/wowdoge/appicon.png</SplashScreen-Image>
+          				</manifestEntries>
+					</archive>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+		    </plugin>
+	
+
+ 			<!-- Produce staging directory with all resources used in creation of 
+        				the linux IzPack installer and in creation of the Mac application bundle -->
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>2.5</version>
+                <executions>
+                    <execution>
+                        <id>copy-resources-to-staging-linux</id>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${staging.linux.dir}</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>target</directory>
+                                    <includes>
+                                        <include>WowDoge-exe.jar</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                    
+                    
+                    <!-- Produce staging directory with all resources used in creation of 
+              						the windows IzPack installer -->
+                    <execution>
+                        <id>copy-resources-to-staging-windows</id>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${staging.windows.dir}</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>target</directory>
+                                    <includes>
+                                        <include>WowDoge.exe</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+
+                    <!-- produce a Mac application bundle -->
+                    <!-- this plugin copies a skeleton App and then copies in the resources 
+              						from the linux staging directory -->
+                    <!-- Note I have tried using http://mojo.codehaus.org/osxappbundle-maven-plugin/ 
+              						but cannot get extra resources into my Java directory in the app -->
+                    <execution>
+                        <id>create-skeleton-Mac-application-bundle</id>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/target/WowDoge.app
+                            </outputDirectory>
+                            <resources>
+                                <resource>
+                                    <!-- skeleton app including JRE -->
+                                    <directory>app-resources/WowDoge.app</directory>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>add-Java-resources-into-application-bundle</id>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/target/WowDoge.app/Contents/Resources/Java
+                            </outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${basedir}/target/staging.linux</directory>
+                                    <includes>
+                                        <include>WowDoge-exe.jar</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+	
+			<!-- Produce linux IzPack installer from contents of linux staging directory -->
+            <plugin>
+                <groupId>org.codehaus.izpack</groupId>
+                <artifactId>izpack-maven-plugin</artifactId>
+                <version>1.0-alpha-5</version>
+                <executions>
+                    <execution>
+                        <id>create-linux-installer</id>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>izpack</goal>
+                        </goals>
+                        <configuration>
+                            <izpackBasedir>${staging.linux.dir}</izpackBasedir>
+                            <installerFile>target/${project.build.finalName}-${project.version}-linux.jar
+                            </installerFile>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>create-windows-installer</id>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>izpack</goal>
+                        </goals>
+                        <configuration>
+                            <izpackBasedir>${staging.windows.dir}</izpackBasedir>
+                            <installerFile>target/${project.build.finalName}-windows.jar
+                            </installerFile>
+                        </configuration>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.codehaus.izpack</groupId>
+                        <artifactId>izpack-standalone-compiler</artifactId>
+                        <version>4.3.4</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+            
+            
+			<!-- Build a Mac DMG -->
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>create-mac-dmg</id>
+                        <phase>install</phase>
+                        <configuration>
+                            <tasks>
+                                <!-- Make the JavaApplicationStub in the Mac application bundle executable
+                       									(it loses its 'x' permission after the copy) -->
+                                <chmod
+                                        file="${basedir}/target/WowDoge.app/Contents/MacOS/JavaApplicationStub"
+                                        perm="777" />
+
+                                <copy
+                                        todir="${basedir}/target/WowDoge-mac/WowDoge.app">
+                                    <fileset dir="${basedir}/target/WowDoge.app"
+                                             includes="**" />
+                                </copy>
+
+                                <!-- Create Applications Symbolic link -->
+                                <!-- WARNING, do not remove this symbolic link by Java(ant) -->
+                                <exec executable="ln" os="'Mac OS X'">
+                                    <arg
+                                            line="-s /Applications ${basedir}/target/WowDoge-mac/Applications" />
+                                </exec>
+
+                                <!-- Make the JavaAppLauncher in the WowDoge app (it loses its
+                       									'x' permission after the copy) -->
+                                <chmod
+                                        file="${basedir}/target/WowDoge-mac/WowDoge.app/Contents/MacOS/JavaApplicationStub"
+                                        perm="777" />
+
+                                <!-- Sign the Mac app -->
+                                <exec executable="codesign" os="'Mac OS X'">
+                                    <arg
+                                            line="--sign 'iPhone Distribution: Pavel Nikitenko (2R552CEUWP)' --force ${basedir}/target/WowDoge-mac/WowDoge.app" />
+                                </exec>
+                                <!-- Verify it is signed ok -->
+                                <exec executable="codesign" os="'Mac OS X'">
+                                    <arg
+                                            line="--display --verbose=4 ${basedir}/target/WowDoge-mac/WowDoge.app" />
+                                </exec>
+
+                                <!-- create a DMG file -->
+                                <exec executable="hdiutil" os="'Mac OS X'">
+                                    <arg value="create" />
+                                    <arg value="-noanyowners"/>
+                                    <arg value="-imagekey"/>
+                                    <arg value="zlib-level=9" />
+                                    <arg value="-srcfolder" />
+                                    <arg value="${basedir}/target/WowDoge-mac" />
+                                    <arg value="${basedir}/target/wowdoge-${project.version}.dmg" />
+                                </exec>
+
+                                <!-- IMPORTANT! -->
+                                <!-- Remove symbolic link before deleting tmp dir -->
+                                <exec executable="rm" os="'Mac OS X'">
+                                    <arg line="-R ${basedir}/target/WowDoge-mac/Applications" />
+                                </exec>
+
+                                <!-- get rid of temporary directory -->
+                                <delete includeEmptyDirs="true">
+                                    <fileset dir="${basedir}/target/WowDoge-mac" />
+                                </delete>
+                            </tasks>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.ant</groupId>
+                        <artifactId>ant-nodeps</artifactId>
+                        <version>1.8.1</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+	
+<!-- 		<plugin> -->
+<!-- 			<groupId>org.codehaus.mojo</groupId> -->
+<!-- 			<artifactId>osxappbundle-maven-plugin</artifactId> -->
+<!-- 			<version>1.0-alpha-2</version> -->
+<!-- 			<configuration> -->
+<!-- 				<mainClass>org.wowdoge.Wow</mainClass> -->
+<!-- 				<iconFile>assemble/WowDoge.icns</iconFile> -->
+<!-- 			</configuration> -->
+<!-- 			<executions> -->
+<!-- 				<execution> -->
+<!-- 					<goals> -->
+<!-- 						<goal>bundle</goal> -->
+<!-- 					</goals> -->
+<!-- 				</execution> -->
+<!-- 			</executions> -->
+<!-- 		</plugin> -->
+		
+	</plugins>
+	</build>
+</project>

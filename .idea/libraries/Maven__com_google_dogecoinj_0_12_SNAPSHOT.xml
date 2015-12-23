@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: com.google:dogecoinj:0.12-SNAPSHOT">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/google/dogecoinj/0.12-SNAPSHOT/dogecoinj-0.12-SNAPSHOT.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/com/google/dogecoinj/0.12-SNAPSHOT/dogecoinj-0.12-SNAPSHOT-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/google/dogecoinj/0.12-SNAPSHOT/dogecoinj-0.12-SNAPSHOT-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
